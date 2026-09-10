@@ -77,10 +77,11 @@
 
 				function onSelect() {
 
-					if ( reticle.visible && currentObject ) {
-						currentObject.position.setFromMatrixPosition( reticle.matrix );
-						currentObject.visible = true;
-					}
+					if ( ! reticle.visible || ! currentObject ) return;
+
+					currentObject.position.setFromMatrixPosition( reticle.matrix );
+					currentObject.visible = true;
+					render();
 
 				}
 
