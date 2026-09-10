@@ -66,7 +66,11 @@
 
 				//
 
-				const arButton = ARButton.createButton( renderer, { requiredFeatures: [ 'hit-test' ] } );
+				const arButton = ARButton.createButton( renderer, {
+    requiredFeatures: [ 'hit-test' ],
+    optionalFeatures: [ 'dom-overlay' ],
+    domOverlay: { root: document.body }
+} );
 				document.body.appendChild( arButton );
 
 				$( '#ARButton' ).click( function () {
