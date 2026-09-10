@@ -83,8 +83,10 @@
 
 					if ( ! reticle.visible || ! currentObject ) return;
 
-					currentObject.position.setFromMatrixPosition( reticle.matrix );
-					currentObject.visible = true;
+					const object = currentObject.clone();
+					object.position.setFromMatrixPosition( reticle.matrix );
+					object.visible = true;
+					scene.add( object );
 					render();
 
 				}
@@ -112,7 +114,7 @@
 				$( '.ar-object' ).on( 'click', function ( event ) {
                     event.preventDefault();
                     currentUrl = $( this ).attr( 'data-model' );
-                    if ( ! renderer.xr.isPresenting ) loadModel( currentUrl );
+				loadModel( currentUrl );
                 } );
 
 				loadModel( currentUrl );
@@ -125,17 +127,13 @@
 
 				new GLTFLoader().load( modelUrl, function ( glb ) {
 					currentObject = glb.scene;
-					currentObject.visible = ! renderer.xr.isPresenting;
-					currentObject.position.set( 0, 0, - 0.5 );
+					currentObject.visible = false;
 
 					const box = new THREE.Box3().setFromObject( currentObject );
 					const size = box.getSize( new THREE.Vector3() );
 					const maxSize = Math.max( size.x, size.y, size.z );
 					if ( maxSize > 0 ) currentObject.scale.setScalar( 0.5 / maxSize );
 
-					box.setFromObject( currentObject );
-					box.getCenter( currentObject.position ).multiplyScalar( - 1 );
-					currentObject.position.z -= 0.5;
 					scene.add( currentObject );
 					render();
 				}, undefined, function ( error ) {
